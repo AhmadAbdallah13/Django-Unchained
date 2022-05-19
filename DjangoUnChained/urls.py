@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blockchain/', include('blockchain.urls')),
+    path('crypto-currency/', include('cryptocurrency.urls')),
 ]
