@@ -32,13 +32,22 @@ class Blockchain:
         new_nonce = 1
         check_nonce = False
         while check_nonce is False:
+            """
+            - the code inside the str() is the algo, make it as hard as you want.
+            
+            - the hash_operation algorithm we pass in must be non-symmetrical
+            such that if the order of operation were to be reversed it would’t result in the same value.
+            For instance, a+b is equal to b+a, but a-b is not equal to b-a.
+            """
             hash_operation = hashlib.sha256(str(new_nonce ** 2 - previous_nonce ** 2).encode()).hexdigest()
+            # the more leading zeros we require the more difficult it will be to mine a block.
             if hash_operation[:4] == '0000':
                 check_nonce = True
             else:
                 new_nonce += 1
         return new_nonce
 
+    # generate a hash of an entire block
     @staticmethod
     def hash(block):
         encoded_block = json.dumps(block, sort_keys=True).encode()
@@ -48,15 +57,15 @@ class Blockchain:
         previous_block = chain[0]
         block_index = 1
         while block_index < len(chain):
-            block = chain[block_index]
-            if block['previous_hash'] != self.hash(previous_block):
+            current_block = chain[block_index]
+            if current_block['previous_hash'] != self.hash(previous_block):
                 return False
             previous_nonce = previous_block['nonce']
-            nonce = block['nonce']
-            hash_operation = hashlib.sha256(str(nonce ** 2 - previous_nonce ** 2).encode()).hexdigest()
+            current_nonce = current_block['nonce']
+            hash_operation = hashlib.sha256(str(current_nonce ** 2 - previous_nonce ** 2).encode()).hexdigest()
             if hash_operation[:4] != '0000':
                 return False
-            previous_block = block
+            previous_block = current_block
             block_index += 1
         return True
 
