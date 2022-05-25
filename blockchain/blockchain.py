@@ -38,6 +38,9 @@ class Blockchain:
             - the hash_operation algorithm we pass in must be non-symmetrical
             such that if the order of operation were to be reversed it would’t result in the same value.
             For instance, a+b is equal to b+a, but a-b is not equal to b-a.
+
+            - we can take advantage of the timestamp to make the algo harder. Read here:
+            https://www.section.io/engineering-education/an-introduction-to-blockchain-architecture/#mining-and-proof-of-work
             """
             hash_operation = hashlib.sha256(str(new_nonce ** 2 - previous_nonce ** 2).encode()).hexdigest()
             # the more leading zeros we require the more difficult it will be to mine a block.
